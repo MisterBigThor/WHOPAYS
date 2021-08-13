@@ -9,14 +9,16 @@ import java.util.TreeMap;
 public abstract class xDomainController<T extends DomainObject>{
     Integer ids;
 
+
     protected TreeMap<String, T> instances;
     //TODO: Reference to the database controller objects.
 
-    public xDomainController() {
+    protected xDomainController() {
         instances = new TreeMap<>();
         getInstancesFromBD();
         ids = instances.size();
     }
+
     protected void getInstancesFromBD(){
         //Call BD to get instances.
     }

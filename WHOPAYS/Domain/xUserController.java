@@ -1,9 +1,17 @@
 package WHOPAYS.Domain;
 
 public class xUserController extends xDomainController<PersonUser>{
+    static xUserController singletonInstance;
 
-    public xUserController() {
+    private xUserController() {
         super();
+    }
+
+    public static xUserController getInstance() {
+        if (singletonInstance == null) {
+            singletonInstance = new xUserController();
+        }
+        return singletonInstance;
     }
 
     @Override
