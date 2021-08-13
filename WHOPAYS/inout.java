@@ -228,7 +228,7 @@ public class inout
     while (digit()) symbol.append(read());
     Integer numeral =
             Integer.valueOf(symbol.toString());
-    return numeral.intValue();
+    return numeral;
   }
 
   public String readline() throws Exception
