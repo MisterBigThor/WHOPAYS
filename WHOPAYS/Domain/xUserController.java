@@ -33,6 +33,9 @@ public class xUserController extends xDomainController<PersonUser>{
             super.addInstance(pu);
         }
     }
+    public void delUser(String username){
+
+    }
     public void createGroup(){
 
     }

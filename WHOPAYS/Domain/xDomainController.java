@@ -8,8 +8,7 @@ import java.util.TreeMap;
  */
 public abstract class xDomainController<T extends DomainObject>{
     Integer ids;
-
-
+    //TODO: Add on-demand loading boolean.
     protected TreeMap<String, T> instances;
     //TODO: Reference to the database controller objects.
 
@@ -23,6 +22,10 @@ public abstract class xDomainController<T extends DomainObject>{
         //Call BD to get instances.
     }
 
+    /**
+     * Get the next unique integer identifier.
+     * @return A unique ID.
+     */
     protected int getNextID(){
         int ret = ids;
         ids++;
@@ -30,6 +33,9 @@ public abstract class xDomainController<T extends DomainObject>{
     }
 
     protected void addInstance(T t){
+        //Save in the domain:
         instances.put(t.getDomainID(), t);
+        //Pass the information to the persistence layer:
+
     }
 }
