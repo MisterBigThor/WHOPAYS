@@ -1,12 +1,20 @@
 package WHOPAYS.Domain;
 
 public class xUserController extends xDomainController<PersonUser>{
+    /**Singleton instance*/
     static xUserController singletonInstance;
 
+    /**
+     * Private builder to support singleton.
+     */
     private xUserController() {
         super();
     }
 
+    /**
+     * Singleton "builder".
+     * @return The singleton instance.
+     */
     public static xUserController getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new xUserController();
@@ -22,10 +30,9 @@ public class xUserController extends xDomainController<PersonUser>{
         instances.put("VB", new PersonUser(3, "alfa", "beta", 10, "VB"));
     }
 
-    //Controller methods:
-    private Boolean existsUserName(String username){
-        return instances.containsKey(username);
-    }
+    //=================================================================//
+    //============================TX METHODS==========================//
+    //=================================================================//
 
     public void addUser(String username, String name, String surname, int age){
         if(! existsUserName(username)){
@@ -36,9 +43,10 @@ public class xUserController extends xDomainController<PersonUser>{
     public void delUser(String username){
 
     }
-    public void createGroup(){
 
+
+    private Boolean existsUserName(String username){
+        return instances.containsKey(username);
     }
-
 
 }
