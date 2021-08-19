@@ -11,13 +11,14 @@ public class Group implements DomainObject{
     String groupName;
     /**Unique group identifier.*/
     int group_id;
-    /**Admin user of the group*/
-    PersonAdmin groupAdmin;
+    /**User with admin rights over this group.*/
+    Set<PersonUser> adminRights;
     /**User id of the members of this group. */
     Set<PersonUser> groupIntegrates;
     /**Related shopping tickets.*/
     List<ShoppingTickets> ticketHistory;
-
+    /**Max users per group*/
+    static int MAX_USERS = 100;
 
     /**
      * Empty constructor, set the minimum require members for an empty group.
@@ -25,10 +26,8 @@ public class Group implements DomainObject{
      * @param group_id Unique identifier of the group.
      * @param admin Person who manages this group.
      */
-    public Group(String groupName, Integer group_id, PersonAdmin admin) {
+    public Group(String groupName, Integer group_id, PersonUser admin) {
         setAttributes(admin, groupName, group_id);
-        groupIntegrates = new HashSet<>();
-        ticketHistory = new ArrayList<>();
     }
 
     /**
@@ -39,10 +38,9 @@ public class Group implements DomainObject{
      * @param groupIntegrates Collection of the identifiers of the users
      * @param ticketHistory Sorted collection of all the tickets.
      */
-    public Group(String groupName, int group_id, PersonAdmin groupAdmin, Set<PersonUser> groupIntegrates, List<ShoppingTickets> ticketHistory) {
-        this.groupName = groupName;
-        this.group_id = group_id;
-        this.groupAdmin = groupAdmin;
+    public Group(String groupName, int group_id, PersonUser groupAdmin,
+                 Set<PersonUser> groupIntegrates, List<ShoppingTickets> ticketHistory) {
+        setAttributes(groupAdmin, groupName, group_id);
         this.groupIntegrates = groupIntegrates;
         this.ticketHistory = ticketHistory;
     }
@@ -55,6 +53,26 @@ public class Group implements DomainObject{
 
     public int getGroup_id() {return group_id;}
 
+    /**
+     * List all the users with admin rights in this group.
+     * @return A list string with the username of all the users with admin rights.
+     */
+    public Set<String> getGroupAdmins(){
+        Set<String> ret = new HashSet<>();
+        this.adminRights.forEach(personUser -> {ret.add(personUser.userName);});
+        return ret;
+    }
+
+    /**
+     * List all the users in the group.
+     * @return A string list with the usernames.
+     */
+    public Set<String> getGroupIntegrates(){
+        Set<String> ret = new HashSet<>();
+        this.groupIntegrates.forEach((personUser -> {ret.add(personUser.userName);}));
+        return ret;
+    }
+
 
     //=================================================================//
     //===========================MODIFY================================//
@@ -62,15 +80,39 @@ public class Group implements DomainObject{
 
     //TODO: Create ticket, del ticket, modify ticket methods.
 
+    //TODO: Add User, del user, Modify user admin rights.
+
+    public void addUser(PersonUser p, boolean adminRights){
+        this.groupIntegrates.add(p);
+        if(adminRights) this.adminRights.add(p);
+    }
+    public void addAdminRights(PersonUser p) throws Exception {
+        if(!this.adminRights.add(p))
+            throw new Exception("The user is an admin already.");
+    }
+    public void delUser(PersonUser p){
+        this.delUserById(p.getId());
+    }
+    public void delUserById(Integer id){
+
+    }
 
     //=================================================================//
     //===========================PRIVATE===============================//
     //=================================================================//
 
-    private void setAttributes(PersonAdmin admin, String groupName, int group_id){
+    /**
+     * Set the value of the following attributes:
+     * @param admin Admin of the group
+     * @param groupName Name of the group.
+     * @param group_id Unique identifier of the group.
+     */
+    private void setAttributes(PersonUser admin, String groupName, int group_id){
         this.groupName = groupName;
-        this.groupAdmin = admin;
         this.group_id = group_id;
+        this.adminRights = new HashSet<>(MAX_USERS);
+        adminRights.add(admin);
+        groupIntegrates = new HashSet<>(MAX_USERS);
         ticketHistory = new ArrayList<>();
     }
 

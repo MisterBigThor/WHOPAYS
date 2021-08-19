@@ -5,7 +5,7 @@ public class xGroupController extends xDomainController<Group>{
     static xGroupController singletonInstance;
 
     /**
-     * Private builder to support the singleton
+     * Private builder to support the singleton design pattern.
      */
     private xGroupController(){super();}
 

@@ -1,12 +1,11 @@
 package WHOPAYS.Domain;
 
-public class Person implements DomainObject {
+public abstract class Person implements DomainObject {
 
     int id;
     String name;
     String surname;
     int age;
-    String userName;
 
     static int int_invalid_field = -1;
     static String str_invalid_field = "";
@@ -28,14 +27,13 @@ public class Person implements DomainObject {
      * @param surname Person surname
      * @param age Person age.
      */
-    public Person(int id, String name, String surname, int age, String userName){
+    public Person(int id, String name, String surname, int age){
         //If we don't use this. to refer to the class, the variables
         //are shadow by the parameters.
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
-        this.userName = userName;
     }
 
     public int getId() {
@@ -75,8 +73,5 @@ public class Person implements DomainObject {
         return id + "-> " + surname + ", " + name + " [" + age + ']';
     }
 
-    @Override
-    public String getDomainID() {
-        return userName;
-    }
+    public abstract boolean equals(PersonUser obj);
 }
