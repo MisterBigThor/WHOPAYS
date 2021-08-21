@@ -3,6 +3,9 @@ package WHOPAYS.Domain;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * User of the system.
+ */
 public class PersonUser extends Person{
     /**User password.*/
     String password; //In the real life, take care of this type of fields.

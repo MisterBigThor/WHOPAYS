@@ -11,31 +11,30 @@ import WHOPAYS.LOG;
  * Each file contains a class, serialized into bytes.
  * @author vcorreal
  */
-public abstract class xPersistenceController<Identifier> {
-
+public class objectDataBase {
+    /**TAG FOR LOGGING*/
+    public static final String CLASS_NAME = "PERSISTENCE";
     /**File with all the information of all the objects*/
-    private File file_ids;
+    final private File file_ids;
     /**Map of objects(save in a file), each entry points to a file
      * with the information.*/
-    private TreeMap<Identifier, File> objectInformation;
+    private TreeMap<String, File> objectInformation;
     /**Path to save the information.*/
-    private String path = "";
+    final private String path;
     /**Number of objects*/
     private int n;
 
-    public static final String CLASS_NAME = "PERSISTENCE";
-
-    //TODO: Add critical exception.
     /**
      * Default builder.
      * @param baseFolder Base directory to store the data.
      * @param name Name of the database.
      * @throws Exception Critical exception, the app will crash.
      */
-    public xPersistenceController(String baseFolder, String name) throws Exception {
-        LOG.LOG_INFO("Loading data from " + name, CLASS_NAME);
+    public objectDataBase(String baseFolder, String name) throws Exception {
+        LOG.LOG_INFO(String.format("Loading data for %s database" , name), CLASS_NAME);
         this.path = baseFolder+File.separator+name;
         this.n = 0;
+        this.objectInformation = new TreeMap<>();
         //Create the directory for the Persistence info:
         File f = new File(this.path);
         f.mkdirs();
@@ -46,7 +45,7 @@ public abstract class xPersistenceController<Identifier> {
             if(!file_ids.createNewFile()) throw new PersistenceException();
             SaveMap();
             n = objectInformation.size();
-            LOG.LOG_INFO("Found "+ n + "entities.", CLASS_NAME);
+            LOG.LOG_INFO("Found "+ n + " entities.", CLASS_NAME);
         }
         else LoadMap();
     }
@@ -56,11 +55,11 @@ public abstract class xPersistenceController<Identifier> {
 
     /**
      * Saves a new object.
-     * @param id Unique identifier
+     * @param id Unique Identifier
      * @param obj_bytes Bytes associated with the new object.
      * @throws PersistenceException if the id is already used.
      */
-    public void SaveRecord(Identifier id, byte[] obj_bytes) throws PersistenceException {
+    public void SaveRecord(String id, byte[] obj_bytes) throws PersistenceException {
         if(Exists(id)) throw new PersistenceException();
         try{
             File f = new File(path+File.separator+id+".bin");
@@ -80,17 +79,17 @@ public abstract class xPersistenceController<Identifier> {
 
     /**
      * Check if a unique ID exists in the system.
-     * @param id
+     * @param id Unique identifier.
      * @return Boolean value.
      */
-    public boolean Exists(Identifier id){return objectInformation.containsKey(id);}
+    public boolean Exists(String id){return objectInformation.containsKey(id);}
 
     /**
      * Delete the entity identified with id.
-     * @param id Unique identifier of the entity.
-     * @throws PersistenceException If the id doesn't exists.
+     * @param id Unique String of the entity.
+     * @throws PersistenceException If the id doesn't exist.
      */
-    public void DeleteEntity(Identifier id) throws PersistenceException {
+    public void DeleteEntity(String id) throws PersistenceException {
         final File f = GetEntityFile(id);
         //"Can't delete the entity "+id
         if(! f.delete()) throw new PersistenceException();
@@ -101,10 +100,10 @@ public abstract class xPersistenceController<Identifier> {
 
     /**
      * Modify the entity attributes.
-     * @param id Unique identifier of the entity.
+     * @param id Unique String of the entity.
      * @param obj_bytes Bytes associated with the object.
      */
-    public void ModifyEntity(Identifier id, byte[] obj_bytes){
+    public void ModifyEntity(String id, byte[] obj_bytes){
         try{
             DeleteEntity(id);
             SaveRecord(id, obj_bytes);
@@ -117,10 +116,10 @@ public abstract class xPersistenceController<Identifier> {
 
     /**
      * Get the object bytes of the entity identified with id.
-     * @param id Identifier of the entity.
+     * @param id String of the entity.
      * @return A byte array with a deserialized object.
      */
-    public byte[] getObject(Identifier id) throws PersistenceException {
+    public byte[] getObject(String id) throws PersistenceException {
         byte[] ret = null;
         try{
             final File obj = objectInformation.get(id);
@@ -134,10 +133,10 @@ public abstract class xPersistenceController<Identifier> {
     }
 
     /**
-     * Get all the identifiers of persistence.
-     * @return A set of identifiers.
+     * Get all the Strings of persistence.
+     * @return A set of Strings.
      */
-    public Set<Identifier> GetAllEntities(){return objectInformation.keySet();}
+    public Set<String> GetAllEntities(){return objectInformation.keySet();}
 
     //=================================================================//
     //=========================PRIVATE METHODS=========================//
@@ -146,11 +145,12 @@ public abstract class xPersistenceController<Identifier> {
     /**
      * Load the information of all the objects (the object information attribute).
      */
+    @SuppressWarnings("unchecked")
     private void LoadMap(){
         try{
             FileInputStream fis = new FileInputStream(file_ids);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            objectInformation = (TreeMap<Identifier, File>) ois.readObject();
+            objectInformation = (TreeMap<String, File>) ois.readObject();
         }
         catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
@@ -173,11 +173,11 @@ public abstract class xPersistenceController<Identifier> {
 
     /**
      * Gets the information of the object related with the id.
-     * @param id Object unique identifier.
+     * @param id Object unique String.
      * @return The file object associated with the id.
      * @throws PersistenceException If the information of the entity isn't found.
      */
-    private File GetEntityFile(Identifier id) throws PersistenceException{
+    private File GetEntityFile(String id) throws PersistenceException{
         final File f = objectInformation.get(id);
         //"The entity "+ id + "doesn't exist"
         if (f == null) throw new PersistenceException();

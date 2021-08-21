@@ -6,7 +6,7 @@ import java.util.*;
  * Represents a group of users, with all his shopping tickets
  * related.
  */
-public class Group implements DomainObject{
+public class Group extends DomainObject{
     /**Group name (no primary key).*/
     String groupName;
     /**Unique group identifier.*/

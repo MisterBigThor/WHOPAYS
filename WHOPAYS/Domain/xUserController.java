@@ -1,21 +1,28 @@
 package WHOPAYS.Domain;
 
+import WHOPAYS.LOG;
+import WHOPAYS.Persistence.xPersitenceController;
+
+import java.util.Set;
+
+/**
+ * Domain controller for all the user instances of the system.
+ */
 public class xUserController extends xDomainController<PersonUser>{
     /**Singleton instance*/
     static xUserController singletonInstance;
 
-    /**
-     * Private builder to support singleton.
-     */
-    private xUserController() {
+    /**Private builder to support singleton.*/
+    private xUserController() throws Exception {
         super();
+
     }
 
     /**
      * Singleton "builder".
      * @return The singleton instance.
      */
-    public static xUserController getInstance() {
+    public static xUserController getInstance() throws Exception {
         if (singletonInstance == null) {
             singletonInstance = new xUserController();
         }
@@ -23,11 +30,17 @@ public class xUserController extends xDomainController<PersonUser>{
     }
 
     @Override
-    protected void getInstancesFromBD() {
-        instances.put("bigThor", new PersonUser(0, "alfa", "beta", 10, "bigThor"));
-        instances.put("small0", new PersonUser(1, "alfa", "beta", 10, "smallO"));
-        instances.put("Valtteri", new PersonUser(2, "alfa", "beta", 10, "Valtteri"));
-        instances.put("VB", new PersonUser(3, "alfa", "beta", 10, "VB"));
+    protected void initController() throws Exception {
+        LOG.LOG_INFO("Loading users bd", "USER_DOMAIN");
+        //1) Load the db object.
+        persistenceDB = xPersitenceController.getInstance().getDbUsers();
+
+        //2) Load all the information.
+        Set<String> identifiers = persistenceDB.GetAllEntities();
+        for(String id : identifiers){
+            instances.put(id, null); //Save only the id, on demand load the object
+        }
+        LOG.LOG_INFO(String.format("Loaded %d users", identifiers.size()), "USER_DOMAIN");
     }
 
     //=================================================================//
@@ -45,7 +58,7 @@ public class xUserController extends xDomainController<PersonUser>{
     }
 
 
-    private Boolean existsUserName(String username){
+    public Boolean existsUserName(String username){
         return instances.containsKey(username);
     }
 

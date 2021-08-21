@@ -1,6 +1,9 @@
 package WHOPAYS.Domain;
 
-public abstract class Person implements DomainObject {
+/**
+ * Represents a person with name, surname and age.
+ */
+public abstract class Person extends DomainObject {
 
     int id;
     String name;

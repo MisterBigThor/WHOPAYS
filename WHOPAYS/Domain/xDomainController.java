@@ -2,25 +2,34 @@ package WHOPAYS.Domain;
 
 import java.util.TreeMap;
 
+import WHOPAYS.LOG;
+import WHOPAYS.Persistence.PersistenceException;
+import WHOPAYS.Persistence.objectDataBase;
+
 /**
  * Domain controller generic class.
  * @param <T> A DomainObject subclass, to use in the controller.
  */
 public abstract class xDomainController<T extends DomainObject>{
+    static String instanceName = "Generic Domain Controller";
+
     Integer ids;
     //TODO: Add on-demand loading boolean.
+    /**Instances accessed via map, logarithmic cost.*/
     protected TreeMap<String, T> instances;
-    //TODO: Reference to the database controller objects.
+    /**Persistence object database*/
+    protected objectDataBase persistenceDB;
 
-    protected xDomainController() {
+    protected xDomainController() throws Exception {
         instances = new TreeMap<>();
-        getInstancesFromBD();
+        initController();
         ids = instances.size();
     }
 
-    protected void getInstancesFromBD(){
-        //Call BD to get instances.
-    }
+    /**
+     * Method to load all the required information.
+     */
+    protected abstract void initController() throws Exception;
 
     /**
      * Get the next unique integer identifier.
@@ -36,6 +45,11 @@ public abstract class xDomainController<T extends DomainObject>{
         //Save in the domain:
         instances.put(t.getDomainID(), t);
         //Pass the information to the persistence layer:
-
+        try {
+            persistenceDB.SaveRecord(t.getDomainID(), t.deserialize());
+        }
+        catch (PersistenceException e) {
+            e.printStackTrace();
+        }
     }
 }

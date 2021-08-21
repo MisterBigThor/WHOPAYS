@@ -7,7 +7,7 @@ import WHOPAYS.Domain.xUserController;
 //FIXME: Use user id's or use the object itself. (For the moment use objects).
 
 class Main{
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int op = 23;
 
         inout input = new inout();
@@ -24,10 +24,12 @@ class Main{
                 switch (op){
                     case 1:
                         //Add user
-                        String s_username=input.readname();
-                        String name=input.readname();
-                        String surname = input.readname();
-                        int age = input.readint();
+                        input.writeln("Adding a user...");
+                        String name= input.userQuestionString("Enter name: ");
+                        String surname = input.userQuestionString("Enter surname: ");
+                        String s_username = input.userQuestionString("Enter username: ");
+                        int age = input.userQuestionInteger("Enter age: ");
+
                         user_domain.addUser(s_username, name, surname, age);
                         break;
                     case -1:
@@ -37,6 +39,7 @@ class Main{
                         break;
                     case 2:
                         //Create group
+
                         break;
 
                     case -2:
