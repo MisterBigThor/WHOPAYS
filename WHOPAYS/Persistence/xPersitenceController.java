@@ -29,12 +29,22 @@ public class xPersitenceController {
         return instance;
     }
 
+    /**
+     * Get the user database
+     * @return An object database object.
+     * @throws Exception If there is any problem while loading the database.
+     */
     public objectDataBase getDbUsers() throws Exception {
         if(this.dbUsers == null)
             this.dbUsers = new objectDataBase(dir, "users");
         return dbUsers;
     }
 
+    /**
+     * Get the groups database
+     * @return An object database object
+     * @throws Exception If there is any problem while loading the database.
+     */
     public objectDataBase getDbGroups() throws Exception {
         if(this.dbGroups == null)
             this.dbGroups= new objectDataBase(dir, "groups");
