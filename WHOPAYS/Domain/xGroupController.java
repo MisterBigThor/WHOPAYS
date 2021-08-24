@@ -12,21 +12,9 @@ public class xGroupController extends xDomainController<Group>{
     /**Singleton instance*/
     static xGroupController singletonInstance;
 
-    /**
-     * Private builder to support the singleton design pattern.
-     */
-    private xGroupController() throws Exception {super();}
-
-    @Override
-    protected void initController() throws Exception {
-        //1) Load the db object.
-        persistenceDB = xPersitenceController.getInstance().getDbGroups();
-        //2) Load all the information.
-        Set<String> ids = persistenceDB.GetAllEntities();
-        for(String id : ids){
-            instances.put(id, null);
-        }
-        LOG.LOG_INFO(String.format("Loaded %d groups", ids.size()), "GROUP_DOMAIN");
+    /**Private builder to support the singleton design pattern.*/
+    private xGroupController() throws Exception {
+        super(xPersitenceController.getInstance().getDbGroups(), "GROUP_DOMAIN");
     }
 
     /**
@@ -34,9 +22,7 @@ public class xGroupController extends xDomainController<Group>{
      * @return The singleton instance.
      */
     public static xGroupController getInstance() throws Exception {
-        if (singletonInstance == null) {
-            singletonInstance = new xGroupController();
-        }
+        if (singletonInstance == null) singletonInstance = new xGroupController();
         return singletonInstance;
     }
 

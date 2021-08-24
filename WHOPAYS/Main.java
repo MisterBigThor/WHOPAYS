@@ -8,7 +8,9 @@ import WHOPAYS.Domain.xUserController;
 
 class Main{
     public static void main(String[] args) throws Exception {
+        //Local auxiliary variables:
         int op = 23;
+        String s_username;
 
         inout input = new inout();
         //Initialize domain controllers:
@@ -16,54 +18,50 @@ class Main{
         xGroupController group_domain = (xGroupController) xGroupController.getInstance();
         //Loop for the commands.
         try{
-            while(op != 0){
-                input.writeln("Enter 0 to exit, or one of the following commands:");
-                String commands_txt = "1, -1, 2, -2"; //todo: Move to static in a class
-                input.writeln(commands_txt);
-                op = input.readint();
-                switch (op){
-                    case 1:
-                        //Add user
-                        input.writeln("Adding a user...");
-                        String name= input.userQuestionString("Enter name: ");
-                        String surname = input.userQuestionString("Enter surname: ");
-                        String s_username = input.userQuestionString("Enter username: ");
-                        int age = input.userQuestionInteger("Enter age: ");
+        while(op != 0){
+            input.writeln("Enter 0 to exit, or one of the following commands:");
+            input.writeln(MainCommands.commands);
+            op = input.readint();
+            switch (op){
+                case 1:
+                    //Add user
+                    input.writeln("Adding a user...");
+                    user_domain.addUser(input.userQuestionString("Enter username: "),
+                            input.userQuestionString("Enter name: "),
+                            input.userQuestionString("Enter surname: "),
+                            input.userQuestionInteger("Enter age: "));
+                    break;
+                case 2:
+                    //Delete user:
+                    s_username = input.userQuestionString("Enter username to be deleted: ");
+                    if(!user_domain.existsUserName(s_username))
+                        input.writeln("The user " + s_username + "wasn't in the system.");
 
-                        user_domain.addUser(s_username, name, surname, age);
-                        break;
-                    case -1:
-                        //Delete user:
-                        String s_usr=input.readname();
-                        user_domain.delUser(s_usr);
-                        break;
-                    case 2:
-                        //Create group
+                    if(! user_domain.delUser(s_username))
+                        input.writeln("Error deleting the user: " + s_username);
+                    break;
+                case 3:
+                    //List users:
+                    input.writeln(user_domain.listUsers().toString());
+                    break;
+                case 4:
+                    //Create group
 
-                        break;
+                    break;
+                case 5:
+                    //Delete groups
 
-                    case -2:
-                        //Delete group
+                    break;
+                case 6:
+                    //List ticket.
 
-                        break;
-                    case 3:
-                        //Create ticket
-
-                        break;
-                    case -3:
-                        //Delete ticket.
-
-                        break;
-                }
+                    break;
             }
+        }
         }
         catch (Exception e){
             System.out.println("!!! Exception thrown !!!");
             System.out.println(e.toString());
         }
-
-
-
-
     }
 }

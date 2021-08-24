@@ -1,5 +1,5 @@
 
-out_dir = compile
+out_dir = .
 
 documentation:
 	javadoc -d docs/ WHOPAYS.Domain WHOPAYS.Persistence WHOPAYS

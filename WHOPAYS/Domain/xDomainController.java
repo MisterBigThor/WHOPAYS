@@ -1,5 +1,6 @@
 package WHOPAYS.Domain;
 
+import java.util.Set;
 import java.util.TreeMap;
 
 import WHOPAYS.LOG;
@@ -11,25 +12,34 @@ import WHOPAYS.Persistence.objectDataBase;
  * @param <T> A DomainObject subclass, to use in the controller.
  */
 public abstract class xDomainController<T extends DomainObject>{
-    static String instanceName = "Generic Domain Controller";
+    String instanceName = "Generic Domain Controller";
 
     Integer ids;
-    //TODO: Add on-demand loading boolean.
     /**Instances accessed via map, logarithmic cost.*/
     protected TreeMap<String, T> instances;
     /**Persistence object database*/
     protected objectDataBase persistenceDB;
 
-    protected xDomainController() throws Exception {
+    protected xDomainController(objectDataBase persistenceDB, String LOG_NAME) throws Exception {
+        this.instanceName = LOG_NAME;
+        this.persistenceDB = persistenceDB;
         instances = new TreeMap<>();
-        initController();
-        ids = instances.size();
+        initController(persistenceDB);
+
     }
 
     /**
      * Method to load all the required information.
      */
-    protected abstract void initController() throws Exception;
+    protected void initController(objectDataBase persistenceDB) throws Exception{
+        LOG.LOG_INFO("Loading data...", instanceName);
+        Set<String> identifiers = persistenceDB.GetAllEntities();
+        for(String id : identifiers){
+            instances.put(id, null); //Save only the id, on demand load the object
+        }
+        ids = instances.size();
+        LOG.LOG_INFO(String.format("Loaded %d instances", ids), instanceName);
+    }
 
     /**
      * Get the next unique integer identifier.
@@ -41,6 +51,10 @@ public abstract class xDomainController<T extends DomainObject>{
         return ret;
     }
 
+    /**
+     * Add a new record of type T.
+     * @param t Object involved
+     */
     protected void addInstance(T t){
         //Save in the domain:
         instances.put(t.getDomainID(), t);
@@ -52,4 +66,9 @@ public abstract class xDomainController<T extends DomainObject>{
             e.printStackTrace();
         }
     }
+
+    public boolean deleteInstance(String id){
+        return null != instances.remove(id);
+    }
+
 }

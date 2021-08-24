@@ -1,8 +1,6 @@
 package WHOPAYS.Domain;
 
-import WHOPAYS.LOG;
 import WHOPAYS.Persistence.xPersitenceController;
-
 import java.util.Set;
 
 /**
@@ -14,8 +12,7 @@ public class xUserController extends xDomainController<PersonUser>{
 
     /**Private builder to support singleton.*/
     private xUserController() throws Exception {
-        super();
-
+        super(xPersitenceController.getInstance().getDbUsers(), "USER_DOMAIN");
     }
 
     /**
@@ -23,38 +20,40 @@ public class xUserController extends xDomainController<PersonUser>{
      * @return The singleton instance.
      */
     public static xUserController getInstance() throws Exception {
-        if (singletonInstance == null) {
-            singletonInstance = new xUserController();
-        }
+        if (singletonInstance == null) singletonInstance = new xUserController();
         return singletonInstance;
-    }
-
-    @Override
-    protected void initController() throws Exception {
-        LOG.LOG_INFO("Loading users bd", "USER_DOMAIN");
-        //1) Load the db object.
-        persistenceDB = xPersitenceController.getInstance().getDbUsers();
-
-        //2) Load all the information.
-        Set<String> identifiers = persistenceDB.GetAllEntities();
-        for(String id : identifiers){
-            instances.put(id, null); //Save only the id, on demand load the object
-        }
-        LOG.LOG_INFO(String.format("Loaded %d users", identifiers.size()), "USER_DOMAIN");
     }
 
     //=================================================================//
     //============================TX METHODS==========================//
     //=================================================================//
 
+    /**
+     * Create a new user, if the username is not registered yet.
+     * @param username Username of the new user.
+     * @param name Name of the new user.
+     * @param surname Surname of the new user.
+     * @param age Age of the new user.
+     */
     public void addUser(String username, String name, String surname, int age){
         if(! existsUserName(username)){
             PersonUser pu = new PersonUser(super.getNextID(), name, surname, age, username);
             super.addInstance(pu);
         }
     }
-    public void delUser(String username){
 
+    /**
+     * Delete a user from the system.
+     * @param username Username to be deleted.
+     * @return True if the user was successfully deleted.
+     */
+    public boolean delUser(String username){
+        super.deleteInstance(username);
+        return false;
+    }
+
+    public Set<String> listUsers(){
+        return instances.keySet();
     }
 
 
