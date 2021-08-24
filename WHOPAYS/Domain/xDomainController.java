@@ -67,7 +67,30 @@ public abstract class xDomainController<T extends DomainObject>{
         }
     }
 
+    /**
+     * Gets the entity under demand, if the entity is already loaded, the information
+     * is returned.
+     * @param id Identifier of the entity
+     * @return The object requested.
+     * @throws Exception If something IO exceptions is thrown.
+     */
+    protected T loadEntity(String id) throws Exception {
+        T t = instances.get(id);
+        if(t == null) {
+            byte[] object = persistenceDB.getObject(id);
+            t = (T) DomainObject.serialize(object);
+            instances.put(id, t);
+        }
+        return t;
+    }
+
     public boolean deleteInstance(String id){
+        try {
+            persistenceDB.DeleteEntity(id);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            return false;
+        }
         return null != instances.remove(id);
     }
 
