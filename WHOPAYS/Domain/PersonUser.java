@@ -40,10 +40,7 @@ public class PersonUser extends Person{
 
     @Override
     public String toString() {
-        return "User{" +
-                "surname='" + surname + '\'' +
-                ", userName='" + userName + '\'' +
-                '}';
+        return String.format("User %s (%s, %s)", this.userName, this.surname, this.name);
     }
 
     @Override
