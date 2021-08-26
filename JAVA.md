@@ -1,4 +1,22 @@
-# JAVA LANGUAGE
+# Prop Course
+
+## Table of contents
+
+In this course you will see and learn the following contents. In this readme file you can find all the documentation 
+you will need.
+* PROP : Quick introduction about the subject
+* Introduction to UML
+* Introduction and basics for GIT
+* JAVA lang introduction
+  * Basics that you will need to know			
+  * Introduction to three-layer architecture
+  * Manage of files inside IntelliJ
+  * Controller implementation and interaction between different layers   
+
+* SWING								
+
+
+## JAVA LANGUAGE
 
 Java is a object-oriented programming language, with the next main features:
 
