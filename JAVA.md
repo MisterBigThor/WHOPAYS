@@ -179,11 +179,92 @@ Almost all the blocks have a C-syntax.
 
 ## Exceptions
 
-TODO: try/catch - throw.
+### Try / Catch
 
-TODO: try/catch/finally
+The **try** statement allows you to define a block of code to be tested for errors while it is being executed.
 
-TODO: User-defined exceptions
+The **catch** statement allows you to define a block of code to be executed, if an error occurs in the try block.
+
+The try and catch keywords come in pairs:
+````java
+try {
+  //  Block of code to try
+}
+catch(Exception e) {
+  //  Block of code to handle errors
+}
+````
+
+#### Exemple
+````java
+public class Main {
+  public static void main(String[ ] args) {
+    try {
+      int[] myNumbers = {1, 2, 3};
+      System.out.println(myNumbers[10]);
+    } catch (Exception e) {
+      System.out.println("Something went wrong.");
+    }
+  }
+}
+````
+
+### Finally
+
+The finally statement lets you execute code, after try...catch, regardless of the result:
+
+````java
+public class Main {
+  public static void main(String[] args) {
+    try {
+      int[] myNumbers = {1, 2, 3};
+      System.out.println(myNumbers[10]);
+    } catch (Exception e) {
+      System.out.println("Something went wrong.");
+    } finally {
+      System.out.println("The 'try catch' is finished.");
+    }
+  }
+}
+````
+
+#### Output
+
+````
+Something went wrong.
+The 'try catch' is finished.
+````
+
+### Implementation of exceptions
+
+For implement our exceptions we will use The throw statement  that allows to create a custom error.
+The throw statement is used together with an exception type. 
+There are many exception types available in Java: ArithmeticException, 
+FileNotFoundException, ArrayIndexOutOfBoundsException, SecurityException, etc...
+
+#### Exemple
+
+````java
+public class Main {
+  static void checkAge(int age) {
+    if (age < 18) {
+      throw new ArithmeticException("Access denied - You must be at least 18 years old.");
+    }
+    else {
+      System.out.println("Access granted - You are old enough!");
+    }
+  }
+
+  public static void main(String[] args) {
+    checkAge(15); // Set age to 15 (which is below 18...)
+  }
+}
+````
+
+If we have some exceptions that are the same we can create a specific file for exceptions.
+
+If you need to use or override some exceptions, you can refer to the following documentation to create your specific exceptions.
+[Documentation custom-exception](https://www.javatpoint.com/custom-exception)
 
 ## Input/Output streaming and file management
 
