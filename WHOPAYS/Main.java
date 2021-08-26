@@ -56,6 +56,10 @@ class Main{
                     //List ticket.
 
                     break;
+                case 7:
+                    //List debts.
+
+                    break;
             }
         }
         }
