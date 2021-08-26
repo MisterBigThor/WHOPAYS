@@ -51,11 +51,11 @@ public class PersonUser extends Person{
     //===========================MODIFY================================//
     //=================================================================//
 
-    public void changePassword(String old_password, String new_password) throws UserException {
+    public void changePassword(String old_password, String new_password) throws PersonUserException {
         if(Objects.equals(this.password, old_password)){
             password= new_password;
         }
-        else throw new UserException(UserException.BadPassword);
+        else throw new PersonUserException(PersonUserException.BadPassword);
     }
 
     public void addAdminGroup(Group g) {

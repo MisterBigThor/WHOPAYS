@@ -4,7 +4,6 @@ import WHOPAYS.Domain.GroupException;
 import WHOPAYS.Domain.PersonUser;
 import WHOPAYS.Domain.Group;
 
-import WHOPAYS.Domain.UserException;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
