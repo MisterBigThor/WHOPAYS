@@ -1,7 +1,5 @@
 package WHOPAYS.Domain;
 
-import WHOPAYS.DomainExceptions.UserInGroupException;
-
 import java.util.*;
 
 /**
@@ -92,14 +90,28 @@ public class Group extends DomainObject{
     //=================================================================//
 
     //************************USER RELATED METHODS*********************//
-    public void addUser(PersonUser p, boolean adminRights) throws UserInGroupException {
-        boolean b_add = this.groupIntegrates.add(p);
-        if(!b_add) throw new UserInGroupException();
-        if(adminRights) this.adminRights.add(p);
+
+    /**
+     * Add a user to this group.
+     * @param p Person to be added.
+     * @param adminRights If true, the user will have admin rights.
+     * @throws GroupException If the user was already in the group, the person limit has reached, or it was an admin already
+     */
+    public void addUser(PersonUser p, boolean adminRights) throws GroupException {
+        if(this.groupIntegrates.size() >= MAX_USERS)
+            throw new GroupException(GroupException.FullGroup);
+
+        if(!this.groupIntegrates.add(p))
+            throw new GroupException(GroupException.UserNotFound);
+
+        if(adminRights)
+            if(!this.adminRights.add(p)) throw new GroupException(GroupException.UserAlreadyAdmin);
+
     }
+
     public void addAdminRights(PersonUser p) throws Exception {
         if(!this.adminRights.add(p))
-            throw new Exception("The user is an admin already.");
+            throw new GroupException(GroupException.UserAlreadyAdmin);
     }
     public void delUser(PersonUser p){
         //TODO: Add exception, userNotExists.

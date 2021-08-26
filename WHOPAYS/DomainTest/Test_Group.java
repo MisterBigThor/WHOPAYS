@@ -1,12 +1,12 @@
 package WHOPAYS.DomainTest;
 
+import WHOPAYS.Domain.GroupException;
 import WHOPAYS.Domain.PersonUser;
 import WHOPAYS.Domain.Group;
 
-import WHOPAYS.DomainExceptions.UserInGroupException;
+import WHOPAYS.Domain.UserException;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -26,8 +26,8 @@ class Test_Group {
             PersonUser pu2 = newRandomUsers(++id);
             try {
                 gr.addUser(pu2, false);
-            } catch (UserInGroupException e) {
-                e.printStackTrace();
+            } catch (GroupException e) {
+                System.out.println(e.getMessage());
             }
         }
         assertEquals(gr.getGroupAdmins().size(), 1);

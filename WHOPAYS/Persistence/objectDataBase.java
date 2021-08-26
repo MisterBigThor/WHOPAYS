@@ -176,7 +176,7 @@ public class objectDataBase {
      * @return The file object associated with the id.
      * @throws PersistenceException If the information of the entity isn't found.
      */
-    private File GetEntityFile(String id) throws PersistenceException{
+    private File GetEntityFile(String id) throws PersistenceException {
         final File f = objectInformation.get(id);
         //"The entity "+ id + "doesn't exist"
         if (f == null) throw new PersistenceException();

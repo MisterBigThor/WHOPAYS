@@ -1,7 +1,5 @@
 package WHOPAYS.Domain;
 
-import WHOPAYS.DomainExceptions.UserInGroupException;
-import WHOPAYS.LOG;
 import WHOPAYS.Persistence.xPersitenceController;
 
 import java.util.Set;
@@ -72,7 +70,7 @@ public class xGroupController extends xDomainController<Group>{
                 g.addUser(user_obj, false);
                 super.editInstance(g);               //Save the new information.
             }
-            catch (UserInGroupException e) {
+            catch (GroupException e) {
                 System.out.printf(">>>>> The user %s was already in the group%n", usrName);
             }
             catch (Exception e) {
@@ -88,7 +86,7 @@ public class xGroupController extends xDomainController<Group>{
                 g.addUser(user_obj, false);
                 super.editInstance(g);               //Save the new information.
             }
-            catch (UserInGroupException e) {
+            catch (GroupException e) {
                 System.out.printf("The user %s was already in the group%n", usrName);
             }
             catch (Exception e) {
