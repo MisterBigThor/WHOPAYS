@@ -1,6 +1,6 @@
 package WHOPAYS.Domain;
 
-import WHOPAYS.Persistence.xPersitenceController;
+import WHOPAYS.Persistence.xPersistenceController;
 
 import java.util.Set;
 
@@ -14,7 +14,7 @@ public class xGroupController extends xDomainController<Group>{
 
     /**Private builder to support the singleton design pattern.*/
     private xGroupController() throws Exception {
-        super(xPersitenceController.getInstance().getDbGroups(), "GROUP_DOMAIN");
+        super(xPersistenceController.getInstance().getDbGroups(), "GROUP_DOMAIN");
         userDomain = xUserController.getInstance();
     }
 

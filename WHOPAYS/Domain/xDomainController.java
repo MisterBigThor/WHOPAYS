@@ -26,13 +26,12 @@ public abstract class xDomainController<T extends DomainObject>{
         this.persistenceDB = persistenceDB;
         instances = new TreeMap<>();
         initController(persistenceDB);
-
     }
 
     /**
      * Method to load all the required information.
      */
-    protected void initController(objectDataBase persistenceDB) throws Exception{
+    protected void initController(objectDataBase persistenceDB){
         LOG.LOG_INFO("Loading data...", instanceName);
         Set<String> identifiers = persistenceDB.GetAllEntities();
         for(String id : identifiers){

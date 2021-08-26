@@ -1,6 +1,7 @@
 package WHOPAYS.Domain;
 
-import WHOPAYS.Persistence.xPersitenceController;
+import WHOPAYS.Persistence.xPersistenceController;
+
 import java.util.Set;
 
 /**
@@ -12,7 +13,7 @@ public class xUserController extends xDomainController<PersonUser>{
 
     /**Private builder to support singleton.*/
     private xUserController() throws Exception {
-        super(xPersitenceController.getInstance().getDbUsers(), "USER_DOMAIN");
+        super(xPersistenceController.getInstance().getDbUsers(), "USER_DOMAIN");
     }
 
     /**

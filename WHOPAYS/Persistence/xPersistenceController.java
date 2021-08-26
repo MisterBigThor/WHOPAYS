@@ -1,42 +1,45 @@
 package WHOPAYS.Persistence;
 
-public class xPersitenceController {
+import WHOPAYS.LOG;
+
+public class xPersistenceController {
 
     static final String TAG = "Generic persistence controller";
     /**Singleton instance*/
-    private static xPersitenceController instance;
+    private static xPersistenceController instance;
     /**Common directory for all the persitence files.*/
     protected static final String dir = ".data";
     /**Database instance for the users*/
     private objectDataBase dbUsers;
     private objectDataBase dbGroups;
 
-    private xPersitenceController() {
+    private xPersistenceController() {
     }
 
     /**
      * get Instance from the singleton design pattern.
      * @return The unique instance of the persistence controller.
      */
-    public static xPersitenceController getInstance(){
-        if (instance == null) {
-            try {
-                instance = new xPersitenceController();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public static xPersistenceController getInstance(){
+        if (instance == null)
+            instance = new xPersistenceController();
         return instance;
     }
 
     /**
-     * Get the user database
+     * Get the user database. The app will crash if there is any exception.
      * @return An object database object.
-     * @throws Exception If there is any problem while loading the database.
      */
-    public objectDataBase getDbUsers() throws Exception {
+    public objectDataBase getDbUsers() {
         if(this.dbUsers == null)
-            this.dbUsers = new objectDataBase(dir, "users");
+            try{
+                this.dbUsers = new objectDataBase(dir, "users");
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                LOG.LOG_INFO(e.getMessage(), TAG);
+                System.exit(-1);
+            }
         return dbUsers;
     }
 
@@ -45,7 +48,7 @@ public class xPersitenceController {
      * @return An object database object
      * @throws Exception If there is any problem while loading the database.
      */
-    public objectDataBase getDbGroups() throws Exception {
+    public objectDataBase getDbGroups() throws Exception{
         if(this.dbGroups == null)
             this.dbGroups= new objectDataBase(dir, "groups");
         return dbGroups;

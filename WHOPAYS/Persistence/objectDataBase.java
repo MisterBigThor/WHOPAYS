@@ -8,7 +8,7 @@ import WHOPAYS.LOG;
 
 /**
  * A class to store information of classes with the same type.
- * Each file contains a class, serialized into bytes.
+ * Each file contains a class, serialized into bytes. If there is an IOException, the app will crash.
  * @author vcorreal
  */
 public class objectDataBase {
@@ -28,27 +28,35 @@ public class objectDataBase {
      * Default builder.
      * @param baseFolder Base directory to store the data.
      * @param name Name of the database.
-     * @throws Exception Critical exception, the app will crash.
+     * @throws PersistenceException Critical exception, the app will crash.
+     * @throws IOException Critical exception, the app will crash.
      */
-    public objectDataBase(String baseFolder, String name) throws Exception {
+    public objectDataBase(String baseFolder, String name) throws PersistenceException, IOException {
         LOG.LOG_INFO(String.format("Loading data for %s database" , name), CLASS_NAME);
         this.path = baseFolder+File.separator+name;
         this.n = 0;
         this.objectInformation = new TreeMap<>();
         //Create the directory for the Persistence info:
         File f = new File(this.path);
-        f.mkdirs();
+
+        if(!f.exists()) {
+            boolean create = f.mkdirs();
+            if(!create) throw new PersistenceException(PersistenceException.UnableCreateDir, true);
+        }
 
         file_ids = new File(this.path+File.separator+"metadata.bin");
         if(! file_ids.exists()){
             LOG.LOG_INFO("Creating a new internal control file...", CLASS_NAME);
-            if(!file_ids.createNewFile()) throw new PersistenceException();
+            if(!file_ids.createNewFile())
+                throw new PersistenceException();
+
             SaveMap();
             n = objectInformation.size();
             LOG.LOG_INFO("Found "+ n + " entities.", CLASS_NAME);
         }
         else LoadMap();
     }
+
     //=================================================================//
     //=========================ENTITY METHODS==========================//
     //=================================================================//
@@ -57,10 +65,10 @@ public class objectDataBase {
      * Saves a new object.
      * @param id Unique Identifier
      * @param obj_bytes Bytes associated with the new object.
-     * @throws PersistenceException if the id is already used.
+     * @throws PersistenceException if the id is already used, isn't critical exception.
      */
     public void SaveRecord(String id, byte[] obj_bytes) throws PersistenceException {
-        if(Exists(id)) throw new PersistenceException();
+        if(Exists(id)) throw new PersistenceException(PersistenceException.DupInstanceIdentifier, false);
         try{
             File f = new File(path+File.separator+id+".bin");
             if(! f.createNewFile()) throw new PersistenceException();
@@ -72,7 +80,6 @@ public class objectDataBase {
             n += 1;
         }
         catch (Exception e) {
-            e.printStackTrace();
             throw new PersistenceException();
         }
     }
@@ -91,8 +98,8 @@ public class objectDataBase {
      */
     public void DeleteEntity(String id) throws PersistenceException {
         final File f = GetEntityFile(id);
-        //"Can't delete the entity "+id
-        if(! f.delete()) throw new PersistenceException();
+        if(! f.delete())
+            throw new PersistenceException(PersistenceException.NotFoundID, false);
         objectInformation.remove(id);
         SaveMap();
         n -= 1;
@@ -111,7 +118,6 @@ public class objectDataBase {
         catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -123,10 +129,11 @@ public class objectDataBase {
         byte[] ret = null;
         try{
             final File obj = objectInformation.get(id);
-            if (obj == null) throw new PersistenceException();
+            if (obj == null) throw new PersistenceException(PersistenceException.NotFoundOBJ, true);
             ret = Files.readAllBytes(obj.toPath());
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
         return ret;
     }
@@ -143,6 +150,7 @@ public class objectDataBase {
 
     /**
      * Load the information of all the objects (the object information attribute).
+     * The app will crash if there is an IO exception.
      */
     @SuppressWarnings("unchecked")
     private void LoadMap(){
@@ -153,11 +161,13 @@ public class objectDataBase {
         }
         catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
+            System.exit(-1);
         }
     }
 
     /**
      * Save the information of all the objects controlled here.
+     * The app will crash if there is an IO exception.
      */
     private void SaveMap(){
         try {
@@ -167,6 +177,7 @@ public class objectDataBase {
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
     }
 
@@ -178,8 +189,7 @@ public class objectDataBase {
      */
     private File GetEntityFile(String id) throws PersistenceException {
         final File f = objectInformation.get(id);
-        //"The entity "+ id + "doesn't exist"
-        if (f == null) throw new PersistenceException();
+        if (f == null) throw new PersistenceException(PersistenceException.NotFoundID, false);
         return f;
     }
 }
