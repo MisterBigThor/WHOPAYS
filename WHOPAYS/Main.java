@@ -46,15 +46,17 @@ class Main{
                     break;
                 case 4:
                     //Create group
-
+                    group_domain.createNewGroup(
+                            input.userQuestionString("Name of the new group?"),
+                            input.userQuestionString("Admin id ?"));
                     break;
                 case 5:
                     //Delete groups
 
                     break;
                 case 6:
-                    //List ticket.
-
+                    //List groups.
+                    input.writeln(group_domain.listGroups().toString());
                     break;
                 case 7:
                     //List debts.

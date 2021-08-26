@@ -1,5 +1,6 @@
 package WHOPAYS.Domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,10 +12,19 @@ public class PersonUser extends Person{
     String password; //In the real life, take care of this type of fields.
     /**Groups this user is admin.*/
     List<Group> myAdminGroups;
+    /**Unique username*/
     String userName;
 
     public PersonUser(int id, String name, String surname, int age, String userName) {
         super(id, name, surname, age);
+        this.userName = userName;
+        this.myAdminGroups = new ArrayList<>();
+    }
+
+    public PersonUser(int id, String name, String surname, int age, String password, List<Group> myAdminGroups, String userName) {
+        super(id, name, surname, age);
+        this.password = password;
+        this.myAdminGroups = myAdminGroups;
         this.userName = userName;
     }
 
@@ -41,4 +51,8 @@ public class PersonUser extends Person{
 
     @Override
     public String getDomainID() {return this.getUsername();}
+
+    public void addAdminGroup(Group g) {
+        myAdminGroups.add(g);
+    }
 }
