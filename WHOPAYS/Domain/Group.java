@@ -118,6 +118,11 @@ public class Group extends DomainObject{
 
     @Override
     public String getDomainID() {
-        return String.valueOf(this.group_id);
+        return String.valueOf(this.groupName);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Group %s, admins : %s", this.groupName, this.adminRights.toString());
     }
 }

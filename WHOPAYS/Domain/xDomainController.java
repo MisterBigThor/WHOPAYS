@@ -1,5 +1,6 @@
 package WHOPAYS.Domain;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -53,7 +54,7 @@ public abstract class xDomainController<T extends DomainObject>{
 
     /**
      * Add a new record of type T.
-     * @param t Object involved
+     * @param t Object involved.
      */
     protected void addInstance(T t){
         //Save in the domain:
@@ -67,6 +68,15 @@ public abstract class xDomainController<T extends DomainObject>{
         }
     }
 
+    /**
+     * Edit the fields of the instance
+     * @param t New data object.
+     */
+    protected void editInstance(T t) {
+        //Save the new instance:
+        instances.put(t.getDomainID(), t);
+        persistenceDB.ModifyEntity(t.getDomainID(), t.deserialize());
+    }
     /**
      * Gets the entity under demand, if the entity is already loaded, the information
      * is returned.
@@ -94,4 +104,11 @@ public abstract class xDomainController<T extends DomainObject>{
         return null != instances.remove(id);
     }
 
+    public Set<String> listInstances(){
+        Set<String> ret = new HashSet<>();
+        for (String id: instances.keySet()) {
+            ret.add(instances.get(id).toString()+"\n");
+        }
+        return ret;
+    }
 }

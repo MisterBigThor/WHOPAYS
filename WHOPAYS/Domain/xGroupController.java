@@ -11,10 +11,12 @@ import java.util.Set;
 public class xGroupController extends xDomainController<Group>{
     /**Singleton instance*/
     static xGroupController singletonInstance;
+    static xUserController userDomain;
 
     /**Private builder to support the singleton design pattern.*/
     private xGroupController() throws Exception {
         super(xPersitenceController.getInstance().getDbGroups(), "GROUP_DOMAIN");
+        userDomain = xUserController.getInstance();
     }
 
     /**
@@ -32,8 +34,24 @@ public class xGroupController extends xDomainController<Group>{
 
     /**
      * Creates a new group in the system.
+     * @param grName Group name
+     * @param adminID Admin id (username)
      */
-    public void createGroup(){
+    public void createNewGroup(String grName, String adminID){
+        if(!persistenceDB.Exists(grName)){
 
+            try {
+                PersonUser admin = userDomain.loadEntity(adminID);
+                Group g = new Group(grName, super.getNextID(), admin);
+                admin.addAdminGroup(g);             //Link the user with the group.
+                userDomain.saveInstance(admin);     //Save the modified admin data.
+                super.addInstance(g);               //Save the new group
+            } catch (Exception e) {
+                System.out.printf("The user %s id wasn't found%n", adminID);
+            }
+        }
     }
+
+    public Set<String> listGroups() {return super.listInstances();}
 }
+

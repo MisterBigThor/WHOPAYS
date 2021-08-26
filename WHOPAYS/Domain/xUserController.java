@@ -61,4 +61,8 @@ public class xUserController extends xDomainController<PersonUser>{
         return instances.containsKey(username);
     }
 
+    protected void saveInstance(PersonUser instance){
+        super.editInstance(instance);
+    }
+
 }
