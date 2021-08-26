@@ -52,9 +52,7 @@ public class xUserController extends xDomainController<PersonUser>{
         return false;
     }
 
-    public Set<String> listUsers(){
-        return instances.keySet();
-    }
+    public Set<String> listUsers(){return super.listInstances();}
 
 
     public Boolean existsUserName(String username){

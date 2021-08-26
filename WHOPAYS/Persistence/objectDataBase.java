@@ -124,7 +124,6 @@ public class objectDataBase {
         try{
             final File obj = objectInformation.get(id);
             if (obj == null) throw new PersistenceException();
-
             ret = Files.readAllBytes(obj.toPath());
         } catch (IOException e) {
             e.printStackTrace();

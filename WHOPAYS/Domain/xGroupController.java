@@ -1,5 +1,6 @@
 package WHOPAYS.Domain;
 
+import WHOPAYS.DomainExceptions.UserInGroupException;
 import WHOPAYS.LOG;
 import WHOPAYS.Persistence.xPersitenceController;
 
@@ -39,7 +40,6 @@ public class xGroupController extends xDomainController<Group>{
      */
     public void createNewGroup(String grName, String adminID){
         if(!persistenceDB.Exists(grName)){
-
             try {
                 PersonUser admin = userDomain.loadEntity(adminID);
                 Group g = new Group(grName, super.getNextID(), admin);
@@ -53,5 +53,48 @@ public class xGroupController extends xDomainController<Group>{
     }
 
     public Set<String> listGroups() {return super.listInstances();}
+
+    public boolean deleteGroup(String grName) {
+        return super.deleteInstance(grName);
+    }
+
+    /**
+     * Adds a new user to the group
+     * @param grName
+     * @param usrName
+     * @return True if the user was correctly added.
+     */
+    public void addUserToGroup(String grName, String usrName) {
+        if(persistenceDB.Exists(grName)){
+            try {
+                PersonUser user_obj = userDomain.loadEntity(usrName);
+                Group g = super.loadEntity(grName);
+                g.addUser(user_obj, false);
+                super.editInstance(g);               //Save the new information.
+            }
+            catch (UserInGroupException e) {
+                System.out.printf(">>>>> The user %s was already in the group%n", usrName);
+            }
+            catch (Exception e) {
+                System.out.printf(">>>>> The user %s id wasn't found%n", usrName);
+            }
+        }
+    }
+    public void addAdminToGroup(String grName, String usrName) {
+        if(persistenceDB.Exists(grName)){
+            try {
+                PersonUser user_obj = userDomain.loadEntity(usrName);
+                Group g = super.loadEntity(grName);
+                g.addUser(user_obj, false);
+                super.editInstance(g);               //Save the new information.
+            }
+            catch (UserInGroupException e) {
+                System.out.printf("The user %s was already in the group%n", usrName);
+            }
+            catch (Exception e) {
+                System.out.printf("The user %s id wasn't found%n", usrName);
+            }
+        }
+    }
 }
 

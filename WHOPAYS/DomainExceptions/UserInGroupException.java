@@ -1,2 +1,4 @@
-package WHOPAYS.DomainExceptions;public class UserInGroupException extends Throwable {
+package WHOPAYS.DomainExceptions;
+
+public class UserInGroupException extends Throwable {
 }

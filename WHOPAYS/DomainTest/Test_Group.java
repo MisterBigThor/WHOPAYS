@@ -3,6 +3,7 @@ package WHOPAYS.DomainTest;
 import WHOPAYS.Domain.PersonUser;
 import WHOPAYS.Domain.Group;
 
+import WHOPAYS.DomainExceptions.UserInGroupException;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;
@@ -23,7 +24,11 @@ class Test_Group {
         Group gr = new Group("myGroup", 12, pu);
         for (int i = 1; i < 25; i++) {
             PersonUser pu2 = newRandomUsers(++id);
-            gr.addUser(pu2, false);
+            try {
+                gr.addUser(pu2, false);
+            } catch (UserInGroupException e) {
+                e.printStackTrace();
+            }
         }
         assertEquals(gr.getGroupAdmins().size(), 1);
         assertEquals(gr.getGroupIntegrates().size(), 24);

@@ -8,7 +8,8 @@ public class MainCommands {
                                     "3. List users\n" +
                                     "4. Create groups\n" +
                                     "5. Delete groups\n" +
-                                    "6. List groups";
+                                    "6. Add user to the group\n"+
+                                    "7. List groups";
 
 
 

@@ -1,5 +1,7 @@
 package WHOPAYS.Domain;
 
+import WHOPAYS.DomainExceptions.UserInGroupException;
+
 import java.util.*;
 
 /**
@@ -13,7 +15,7 @@ public class Group extends DomainObject{
     int group_id;
     /**User with admin rights over this group.*/
     Set<PersonUser> adminRights;
-    /**User id of the members of this group. */
+    /**User id of the members of this group. All admins are also integrates*/
     Set<PersonUser> groupIntegrates;
     /**Related shopping tickets.*/
     List<ShoppingTickets> ticketHistory;
@@ -28,6 +30,7 @@ public class Group extends DomainObject{
      */
     public Group(String groupName, Integer group_id, PersonUser admin) {
         setAttributes(admin, groupName, group_id);
+        this.groupIntegrates.add(admin);
     }
 
     /**
@@ -82,8 +85,9 @@ public class Group extends DomainObject{
 
     //TODO: Add User, del user, Modify user admin rights.
 
-    public void addUser(PersonUser p, boolean adminRights){
-        this.groupIntegrates.add(p);
+    public void addUser(PersonUser p, boolean adminRights) throws UserInGroupException {
+        boolean b_add = this.groupIntegrates.add(p);
+        if(!b_add) throw new UserInGroupException();
         if(adminRights) this.adminRights.add(p);
     }
     public void addAdminRights(PersonUser p) throws Exception {
@@ -118,11 +122,11 @@ public class Group extends DomainObject{
 
     @Override
     public String getDomainID() {
-        return String.valueOf(this.groupName);
+        return String.valueOf(this.group_id);
     }
 
     @Override
     public String toString() {
-        return String.format("Group %s, admins : %s", this.groupName, this.adminRights.toString());
+        return String.format("%d - Group %s, admins : %s. \n\t Users: %s\n", this.group_id, this.groupName, this.adminRights.toString(), this.groupIntegrates.toString());
     }
 }

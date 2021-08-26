@@ -52,13 +52,25 @@ class Main{
                     break;
                 case 5:
                     //Delete groups
-
+                    input.writeln(group_domain.listGroups().toString());
+                    group_domain.deleteGroup(
+                            input.userQuestionString("Enter the Id of the group to be deleted:")
+                    );
                     break;
                 case 6:
+                    //Add users to the group.
+                    input.writeln(group_domain.listGroups().toString());
+                    group_domain.addUserToGroup(
+                            input.userQuestionString("Enter the Id of the group to be edited:"),
+                            input.userQuestionString("Enter the Id of the user to be added:")
+                    );
+
+                    break;
+                case 7:
                     //List groups.
                     input.writeln(group_domain.listGroups().toString());
                     break;
-                case 7:
+                case 8:
                     //List debts.
 
                     break;

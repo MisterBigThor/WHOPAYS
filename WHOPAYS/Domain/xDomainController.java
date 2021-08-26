@@ -94,7 +94,12 @@ public abstract class xDomainController<T extends DomainObject>{
         return t;
     }
 
-    public boolean deleteInstance(String id){
+    /**
+     * Deletes an instance, identified with id
+     * @param id Unique identifier
+     * @return True if the instance was deleted correct, false otherwise.
+     */
+    protected boolean deleteInstance(String id){
         try {
             persistenceDB.DeleteEntity(id);
         } catch (PersistenceException e) {
@@ -104,10 +109,18 @@ public abstract class xDomainController<T extends DomainObject>{
         return null != instances.remove(id);
     }
 
+    /**
+     * List all instances in the controller.
+     * @return A set of strings, with the information.
+     */
     public Set<String> listInstances(){
         Set<String> ret = new HashSet<>();
         for (String id: instances.keySet()) {
-            ret.add(instances.get(id).toString()+"\n");
+            try {
+                ret.add(loadEntity(id).toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return ret;
     }
