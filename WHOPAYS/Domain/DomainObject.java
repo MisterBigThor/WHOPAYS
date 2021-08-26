@@ -2,9 +2,16 @@ package WHOPAYS.Domain;
 
 import java.io.*;
 
+/**
+ * Abstract class to make support to the domain controllers.
+ */
 public abstract class DomainObject implements Serializable {
     public abstract String getDomainID();
 
+    /**
+     * Serialize a DomainObject
+     * @return A byte array with all the information.
+     */
     byte[] deserialize(){
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -19,6 +26,12 @@ public abstract class DomainObject implements Serializable {
         }
         return null;
     }
+
+    /**
+     * De-serialize the bytes and returns the DomainObject.
+     * @param bytes Bytes
+     * @return A DomainObject.
+     */
     static DomainObject serialize(byte[] bytes){
         try{
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);

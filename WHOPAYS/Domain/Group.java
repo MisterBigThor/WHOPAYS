@@ -76,15 +76,22 @@ public class Group extends DomainObject{
         return ret;
     }
 
+    @Override
+    public String getDomainID() {
+        return String.valueOf(this.group_id);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d - Group %s, admins : %s. \n\t Users: %s\n", this.group_id, this.groupName, this.adminRights.toString(), this.groupIntegrates.toString());
+    }
+
 
     //=================================================================//
     //===========================MODIFY================================//
     //=================================================================//
 
-    //TODO: Create ticket, del ticket, modify ticket methods.
-
-    //TODO: Add User, del user, Modify user admin rights.
-
+    //************************USER RELATED METHODS*********************//
     public void addUser(PersonUser p, boolean adminRights) throws UserInGroupException {
         boolean b_add = this.groupIntegrates.add(p);
         if(!b_add) throw new UserInGroupException();
@@ -95,11 +102,18 @@ public class Group extends DomainObject{
             throw new Exception("The user is an admin already.");
     }
     public void delUser(PersonUser p){
+        //TODO: Add exception, userNotExists.
         this.delUserById(p.getId());
     }
-    public void delUserById(Integer id){
 
+    public void delUserById(Integer id){
+         //TODO: Here
     }
+
+    //************************TICKETS RELATED METHODS*********************//
+    //TODO: Create ticket, del ticket, modify ticket methods.
+
+
 
     //=================================================================//
     //===========================PRIVATE===============================//
@@ -118,15 +132,5 @@ public class Group extends DomainObject{
         adminRights.add(admin);
         groupIntegrates = new HashSet<>(MAX_USERS);
         ticketHistory = new ArrayList<>();
-    }
-
-    @Override
-    public String getDomainID() {
-        return String.valueOf(this.group_id);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%d - Group %s, admins : %s. \n\t Users: %s\n", this.group_id, this.groupName, this.adminRights.toString(), this.groupIntegrates.toString());
     }
 }
