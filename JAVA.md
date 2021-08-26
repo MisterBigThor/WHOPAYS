@@ -1,6 +1,6 @@
-#Prop Course
+# Prop Course
 
-##Table of contents
+## Table of contents
 
 In this course you will see and learn the following contents. In this readme file you can find all the documentation 
 you will need.
