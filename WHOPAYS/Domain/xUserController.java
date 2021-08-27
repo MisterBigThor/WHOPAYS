@@ -11,10 +11,13 @@ import java.util.Set;
 public class xUserController extends xDomainController<PersonUser>{
     /**Singleton instance*/
     static xUserController singletonInstance;
+    /**User logged at this moment.*/
+    static PersonUser LogUser;
 
     /**Private builder to support singleton.*/
     private xUserController() throws Exception {
         super(xPersistenceController.getInstance().getDbUsers(), "USER_DOMAIN");
+        LogUser = null;
     }
 
     /**
@@ -26,15 +29,29 @@ public class xUserController extends xDomainController<PersonUser>{
         return singletonInstance;
     }
 
-    public void loginUser(String user, String password) throws PersonUserException, PersistenceException {
+    /**
+     * Log in into the user.
+     * @param user Username
+     * @param password Password
+     * @throws PersonUserException If the password is incorrect.
+     * @throws PersistenceException If the user wasn't found.
+     */
+    public void LoginUser(String user, String password) throws PersonUserException, PersistenceException {
         if(existsUserName(user)){
-            if(!this.loadEntity(user).login(password))
+            LogUser = this.loadEntity(user);
+            if(!LogUser.login(password))
                 throw new PersonUserException(PersonUserException.BadPassword);
         }
         else throw new PersonUserException(PersonUserException.UserNotFound);
     }
 
-
+    /**
+     * Log out from the current user.
+     */
+    public void LogOut(){
+        LogUser = null;
+    }
+    public String getLoginUserName() {return LogUser.getUsername();}
     //=================================================================//
     //============================TX METHODS==========================//
     //=================================================================//
@@ -46,11 +63,12 @@ public class xUserController extends xDomainController<PersonUser>{
      * @param surname Surname of the new user.
      * @param age Age of the new user.
      */
-    public void addUser(String username, String name, String surname, int age, String password){
+    public void addUser(String username, String name, String surname, int age, String password) throws PersonUserException {
         if(! existsUserName(username)){
             PersonUser pu = new PersonUser(super.getNextID(), name, surname, age, username, password);
             super.addInstance(pu);
         }
+        else throw new PersonUserException(PersonUserException.UserNameDup);
     }
 
     /**

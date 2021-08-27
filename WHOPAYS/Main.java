@@ -12,9 +12,10 @@ class Main{
     public static void main(String[] args) throws Exception {
         //Local auxiliary variables:
         int op = 23;
-        String s_username;
+        boolean log = false;
 
-        inout input = new inout();
+        inout input = inout.getInstance();
+
         //Initialize domain controllers:
         xUserController user_domain = (xUserController) xUserController.getInstance();
         xGroupController group_domain = (xGroupController) xGroupController.getInstance();
@@ -22,13 +23,31 @@ class Main{
         //Loop for the commands.
         try{
         while(op != 0){
+            if(!log){
+                int x = input.userQuestionInteger("0. To login, 1 or greater to create a new user.");
+                if(x >= 1){
+                    input.writeln("Adding a new user...");
+                    try {
+                        UserMainMethods.AddUserInterface();
+                    }
+                    catch (PersonUserException e) {
+                        input.writeln(e.getMessage());
+                    }
+
+                }
+                UserMainMethods.loginLoop();
+                log = true;
+            }
             input.writeln("Enter 0 to exit, or one of the following commands:");
             input.writeln(MainCommands.commands);
             op = input.readint();
             switch (op){
                 case 1:
                     //Add user
-                    UserMainMethods.AddUserInterface();
+                    try {
+                        UserMainMethods.AddUserInterface();
+                    }
+                    catch (PersonUserException e) {input.writeln(e.getMessage());}
                     break;
 
                 case 2:
@@ -71,22 +90,15 @@ class Main{
                     break;
 
                 case 8:
-                    //Login.
-                    boolean correctLogin = false;
-                    while(!correctLogin){ //Can use while(true) + break;
-                        try {
-                            input.writeln("====LOGIN====");
-                            user_domain.loginUser(
-                                    input.userQuestionString("Enter the username:"),
-                                    input.userQuestionString("Enter the password"));
-                            input.writeln("Correct login");
-                            correctLogin = true;
-                        }
-                        catch (PersonUserException e) {
-                            System.out.println(e.getMessage());
-                            correctLogin = false;
-                        }
-                    }
+                    //Log Out
+                    UserMainMethods.LogOut();
+                    log = false;
+                    break;
+                case 9:
+                    //Log Out && end the application.
+                    UserMainMethods.LogOut();
+                    log = false;
+                    System.exit(0);
                     break;
             }
         }

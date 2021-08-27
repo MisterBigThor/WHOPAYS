@@ -1,22 +1,50 @@
 package WHOPAYS.ConsoleInterface;
 
+import WHOPAYS.Domain.PersonUserException;
 import WHOPAYS.Domain.xGroupController;
 import WHOPAYS.Domain.xUserController;
 import WHOPAYS.inout;
 
+/**
+ * User related commands implementation.
+ */
 public class UserMainMethods {
 
-    private static inout io;
+    private static final inout io = inout.getInstance();
     private static xUserController user_domain;
     private static xGroupController group_domain;
-
-    public UserMainMethods(inout io) throws Exception {
-        UserMainMethods.io = io;
-        user_domain = (xUserController) xUserController.getInstance();
-        group_domain = (xGroupController) xGroupController.getInstance();
+    static {
+        try {
+            user_domain = xUserController.getInstance();
+            group_domain = xGroupController.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void AddUserInterface() throws Exception {
+    public static void loginLoop() throws Exception {
+        boolean correctLogin = false;
+        while(!correctLogin){ //Can use while(true) + break;
+            try {
+                io.writeln("====LOGIN====");
+                user_domain.LoginUser(
+                        io.userQuestionString("Enter the username:"),
+                        io.userQuestionString("Enter the password"));
+                io.writeln("Correct login");
+                correctLogin = true;
+            }
+            catch (PersonUserException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        io.writeln(String.format("Actual user: %s", user_domain.getLoginUserName()));
+    }
+
+    public static void LogOut(){
+        user_domain.LogOut();
+    }
+
+    public static void AddUserInterface() throws Exception, PersonUserException{
         io.writeln("Adding a user...");
         user_domain.addUser(io.userQuestionString("Enter username: "),
                 io.userQuestionString("Enter name: "),

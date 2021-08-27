@@ -26,7 +26,14 @@ public class inout {
             sp = ' ';
     private final String EOF = "eof";
 
-    public inout() { }
+    private static inout instance;
+
+    private inout() { }
+
+    public static inout getInstance(){
+        if (instance == null) instance = new inout();
+        return instance;
+    }
 
     /* ====Write operations==== */
 
