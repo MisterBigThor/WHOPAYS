@@ -1,6 +1,8 @@
 package WHOPAYS;
 
-import WHOPAYS.Domain.xDomainController;
+import WHOPAYS.ConsoleInterface.MainCommands;
+import WHOPAYS.ConsoleInterface.*;
+import WHOPAYS.Domain.PersonUserException;
 import WHOPAYS.Domain.xGroupController;
 import WHOPAYS.Domain.xUserController;
 
@@ -16,6 +18,7 @@ class Main{
         //Initialize domain controllers:
         xUserController user_domain = (xUserController) xUserController.getInstance();
         xGroupController group_domain = (xGroupController) xGroupController.getInstance();
+
         //Loop for the commands.
         try{
         while(op != 0){
@@ -25,31 +28,26 @@ class Main{
             switch (op){
                 case 1:
                     //Add user
-                    input.writeln("Adding a user...");
-                    user_domain.addUser(input.userQuestionString("Enter username: "),
-                            input.userQuestionString("Enter name: "),
-                            input.userQuestionString("Enter surname: "),
-                            input.userQuestionInteger("Enter age: "));
+                    UserMainMethods.AddUserInterface();
                     break;
+
                 case 2:
                     //Delete user:
-                    s_username = input.userQuestionString("Enter username to be deleted: ");
-                    if(!user_domain.existsUserName(s_username))
-                        input.writeln("The user " + s_username + "wasn't in the system.");
-
-                    if(! user_domain.delUser(s_username))
-                        input.writeln("Error deleting the user: " + s_username);
+                    UserMainMethods.DeleteUserInterface();
                     break;
+
                 case 3:
                     //List users:
                     input.writeln(user_domain.listUsers().toString());
                     break;
+
                 case 4:
                     //Create group
                     group_domain.createNewGroup(
                             input.userQuestionString("Name of the new group?"),
                             input.userQuestionString("Admin id ?"));
                     break;
+
                 case 5:
                     //Delete groups
                     input.writeln(group_domain.listGroups().toString());
@@ -57,6 +55,7 @@ class Main{
                             input.userQuestionString("Enter the Id of the group to be deleted:")
                     );
                     break;
+
                 case 6:
                     //Add users to the group.
                     input.writeln(group_domain.listGroups().toString());
@@ -64,22 +63,37 @@ class Main{
                             input.userQuestionString("Enter the Id of the group to be edited:"),
                             input.userQuestionString("Enter the Id of the user to be added:")
                     );
-
                     break;
+
                 case 7:
                     //List groups.
                     input.writeln(group_domain.listGroups().toString());
                     break;
-                case 8:
-                    //List debts.
 
+                case 8:
+                    //Login.
+                    boolean correctLogin = false;
+                    while(!correctLogin){ //Can use while(true) + break;
+                        try {
+                            input.writeln("====LOGIN====");
+                            user_domain.loginUser(
+                                    input.userQuestionString("Enter the username:"),
+                                    input.userQuestionString("Enter the password"));
+                            input.writeln("Correct login");
+                            correctLogin = true;
+                        }
+                        catch (PersonUserException e) {
+                            System.out.println(e.getMessage());
+                            correctLogin = false;
+                        }
+                    }
                     break;
             }
         }
         }
         catch (Exception e){
             System.out.println("!!! Exception thrown !!!");
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
         }
     }
 }

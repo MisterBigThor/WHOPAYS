@@ -81,9 +81,9 @@ public abstract class xDomainController<T extends DomainObject>{
      * is returned.
      * @param id Identifier of the entity
      * @return The object requested.
-     * @throws Exception If something IO exceptions is thrown.
+     * @throws PersistenceException If something IO exceptions is thrown.
      */
-    protected T loadEntity(String id) throws Exception {
+    protected T loadEntity(String id) throws PersistenceException {
         T t = instances.get(id);
         if(t == null) {
             byte[] object = persistenceDB.getObject(id);

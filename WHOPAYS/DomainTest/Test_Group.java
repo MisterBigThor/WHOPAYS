@@ -49,7 +49,7 @@ class Test_Group {
         byte[] arr = new byte[7];
         new Random().nextBytes(arr);
         String username = new String(arr, StandardCharsets.US_ASCII);
-        PersonUser ret = new PersonUser(id, name, surname, age, username);
+        PersonUser ret = new PersonUser(id, name, surname, age, username, "");
         return ret;
     }
 }

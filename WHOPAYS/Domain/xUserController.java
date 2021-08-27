@@ -1,5 +1,6 @@
 package WHOPAYS.Domain;
 
+import WHOPAYS.Persistence.PersistenceException;
 import WHOPAYS.Persistence.xPersistenceController;
 
 import java.util.Set;
@@ -25,6 +26,15 @@ public class xUserController extends xDomainController<PersonUser>{
         return singletonInstance;
     }
 
+    public void loginUser(String user, String password) throws PersonUserException, PersistenceException {
+        if(existsUserName(user)){
+            if(!this.loadEntity(user).login(password))
+                throw new PersonUserException(PersonUserException.BadPassword);
+        }
+        else throw new PersonUserException(PersonUserException.UserNotFound);
+    }
+
+
     //=================================================================//
     //============================TX METHODS==========================//
     //=================================================================//
@@ -36,9 +46,9 @@ public class xUserController extends xDomainController<PersonUser>{
      * @param surname Surname of the new user.
      * @param age Age of the new user.
      */
-    public void addUser(String username, String name, String surname, int age){
+    public void addUser(String username, String name, String surname, int age, String password){
         if(! existsUserName(username)){
-            PersonUser pu = new PersonUser(super.getNextID(), name, surname, age, username);
+            PersonUser pu = new PersonUser(super.getNextID(), name, surname, age, username, password);
             super.addInstance(pu);
         }
     }

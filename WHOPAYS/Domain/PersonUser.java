@@ -17,10 +17,11 @@ public class PersonUser extends Person{
     /**Unique username*/
     String userName;
 
-    public PersonUser(int id, String name, String surname, int age, String userName) {
+    public PersonUser(int id, String name, String surname, int age, String userName, String password) {
         super(id, name, surname, age);
         this.userName = userName;
         this.myAdminGroups = new ArrayList<>();
+        this.password = password;
     }
 
     public PersonUser(int id, String name, String surname, int age, String password, List<Group> myAdminGroups, String userName) {
@@ -60,5 +61,9 @@ public class PersonUser extends Person{
 
     public void addAdminGroup(Group g) {
         myAdminGroups.add(g);
+    }
+
+    public boolean login(String password) {
+        return Objects.equals(this.password, password);
     }
 }

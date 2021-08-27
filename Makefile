@@ -1,11 +1,11 @@
 
-out_dir = .
+out_dir = classFiles
 
 documentation:
 	javadoc -d docs/ WHOPAYS.Domain WHOPAYS.Persistence WHOPAYS
 	git add docs/*
 	git commit -m "update JAVADOC"
-	git push
+	#git push
 
 compile_project:
 	javac -d $(out_dir)/ WHOPAYS/Domain/*.java

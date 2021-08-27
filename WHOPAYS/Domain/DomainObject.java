@@ -38,6 +38,9 @@ public abstract class DomainObject implements Serializable {
             ObjectInputStream ois = new ObjectInputStream(bais);
             return (DomainObject) ois.readObject();
         }
+        catch (InvalidClassException e){
+            System.out.println("seems that the saved instances are from a later version or corrupted.!");
+        }
         catch (Exception e) {
             e.printStackTrace();
         }

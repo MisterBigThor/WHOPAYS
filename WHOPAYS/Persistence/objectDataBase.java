@@ -124,6 +124,7 @@ public class objectDataBase {
      * Get the object bytes of the entity identified with id.
      * @param id String of the entity.
      * @return A byte array with a deserialized object.
+     * @throws PersistenceException If the object wasn't found.
      */
     public byte[] getObject(String id) throws PersistenceException {
         byte[] ret = null;

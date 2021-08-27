@@ -1,4 +1,4 @@
-package WHOPAYS;
+package WHOPAYS.ConsoleInterface;
 
 public class MainCommands {
 
@@ -9,8 +9,7 @@ public class MainCommands {
                                     "4. Create groups\n" +
                                     "5. Delete groups\n" +
                                     "6. Add user to the group\n"+
-                                    "7. List groups";
-
-
+                                    "7. List groups\n"+
+                                    "8. Login";
 
 }
