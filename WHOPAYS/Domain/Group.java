@@ -113,13 +113,13 @@ public class Group extends DomainObject{
         if(!this.adminRights.add(p))
             throw new GroupException(GroupException.UserAlreadyAdmin);
     }
-    public void delUser(PersonUser p){
-        //TODO: Add exception, userNotExists.
-        this.delUserById(p.getId());
+    public void delUser(PersonUser p) throws GroupException {
+        boolean remove = this.groupIntegrates.remove(p);
+        if(!remove) throw new GroupException(GroupException.UserNotFound);
     }
 
-    public void delUserById(Integer id){
-         //TODO: Here
+    public void delUserById(String id) throws GroupException{
+        this.delUser(new PersonUser(id));
     }
 
     //************************TICKETS RELATED METHODS*********************//

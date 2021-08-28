@@ -31,6 +31,10 @@ public class PersonUser extends Person{
         this.userName = userName;
     }
 
+    protected PersonUser(String usrName) {
+        this.userName = usrName;
+    }
+
     //=================================================================//
     //===========================GETTERS===============================//
     //=================================================================//
@@ -46,8 +50,10 @@ public class PersonUser extends Person{
     }
 
     @Override
-    public boolean equals(PersonUser obj) {return obj.getId() == this.id;}
-
+    public boolean equals(Object obj) {
+        if(! (obj instanceof PersonUser)) return false;
+        return this.userName.equals(((PersonUser) obj).getUsername());
+    }
     //=================================================================//
     //===========================MODIFY================================//
     //=================================================================//

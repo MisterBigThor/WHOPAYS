@@ -76,5 +76,4 @@ public abstract class Person extends DomainObject {
         return id + "-> " + surname + ", " + name + " [" + age + ']';
     }
 
-    public abstract boolean equals(PersonUser obj);
 }

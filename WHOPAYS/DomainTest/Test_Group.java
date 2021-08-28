@@ -7,7 +7,7 @@ import WHOPAYS.Domain.Group;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +30,7 @@ class Test_Group {
             }
         }
         assertEquals(gr.getGroupAdmins().size(), 1);
-        assertEquals(gr.getGroupIntegrates().size(), 24);
+        assertEquals(gr.getGroupIntegrates().size(), 25);
     }
 
     /**
@@ -38,7 +38,28 @@ class Test_Group {
      */
     @Test
     void createGroup2(){
+        int id = 0;
 
+        PersonUser pu = newRandomUsers(0);
+        Group gr = new Group("myGroup", 123, pu);
+
+        List<String> UsrNames = Arrays.asList("Alfa", "Beta", "Charlie", "Delta");
+        for(String usrName : UsrNames){
+            PersonUser pu2 = new PersonUser(++id, "name", "surname", 23, usrName, "noPass");
+            try {
+                gr.addUser(pu2, false);
+            } catch (GroupException e) {
+                System.out.println(e.getMessage());
+                fail();
+            }
+        }
+        try {
+            gr.delUserById(UsrNames.get(2));
+        } catch (GroupException e) {
+            fail("Unexpected exception!");
+        }
+        assertEquals(gr.getGroupAdmins().size(), 1);
+        assertEquals(gr.getGroupIntegrates().size(), UsrNames.size()-1+1);
     }
 
     private PersonUser newRandomUsers(int id){

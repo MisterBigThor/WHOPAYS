@@ -88,7 +88,6 @@ class Main{
                     //List groups.
                     input.writeln(group_domain.listGroups().toString());
                     break;
-
                 case 8:
                     //Log Out
                     UserMainMethods.LogOut();

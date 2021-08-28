@@ -46,4 +46,9 @@ public abstract class DomainObject implements Serializable {
         }
         return null;
     }
+
+    @Override
+    public int hashCode() {
+        return this.getDomainID().hashCode();
+    }
 }
