@@ -47,7 +47,9 @@ Is very useful to group the use cases, in the example we can group the create/de
 
 The object orientation is a very useful programming concept, used to keep organized in structures all the source code and to track the bugs.
 
-A <u>**class**</u> is an abstract representation of some object we want to model, for example we can create a class to represent the Poker playing cards:
+A <u>**class**</u> is an abstract representation of some object we want to model. A class is conformed of attributes and methods.
+
+For example we can create a class to represent the Poker playing cards:
 
 ![image-20210828132831495](JAVA.assets/image-20210828132831495.png)
 
@@ -57,19 +59,155 @@ Here, we have defined an UML class that can be used to represent a card inside o
 >
 > Always is important to keep the attributes private to being able in a future to change the internal representation. Imagine the *Number* char becomes an Integer, we will need to adapt only the getter and setter method, no the others classes and methods that uses this methods. If we don't use this type of methods, we will need to change a lot of source code to adapt this representation change.
 
+You can see in the example above, the *this* keyword. This keyword is use to reefer to the "actual" instance of the object.
+
 #### Method overloading
 
 This concept is used to use a same method name with different parameters. 
 
 Imagine that we want to set the Number of a card with integers, characters and strings; for a better code develop experience (and also make the source code more readable) we can use the same method name.
 
-![image-20210828135215634](JAVA.assets/image-20210828135215634.png)
-
-> We can also use different method name
+```java
+public class Card{
+    private char Number;
+    private CardType Type;
+    
+    public enum CardType{
+        Clubs, Diamonds, Spades, Hearts
+    }
+    //Character with the internal representation (A-2-3...-9-J-Q-k)
+    public void setNumber(char number) {
+        this.Number = number;
+    }
+    //Character with 1(As)-2-3-4-5-...-9-10(J)-11(Q)-12(K)
+    public void setNumber(Integer number){
+        
+    }
+    //String with A,J,Q,K & numbers in [2, 9]
+    public void setNumber(String number, Boolean another){
+        
+    }
+}
+```
 
 #### Class inheritance and method override
 
+The class inheritance is a option to <u>**redefine the behavior**</u> of a class and/or make a class more specific. For example, we can define a general card class and create four subclasses for each card type:
 
+![](JAVA.assets/Diagrama1.png)
+
+````java
+public class Card2{
+    private char Number;
+    
+    public Card2(char Number) {
+        this.Number = Number;
+    }
+    
+    //getter, setters, etc...
+    public char getType(){return '0';}
+    
+    @Override
+    public String toString() {
+        return String.valueOf(Number) + this.getType();
+    }
+}
+
+class Diamonds extends Card2{
+
+    public Diamonds(char num){super(num);}
+
+    @Override
+    public char getType(){
+        return 'D';
+    }
+}
+public static void main(String[] args) {
+    Card2 c1 = new Diamonds('9');
+    Card2 c2 = new Hearts('9');
+    System.out.println(c1.toString());
+    System.out.println(c2.toString());
+}
+````
+
+#### Abstract classes and interfaces
+
+Following with the inheritance example, we need to ensure to don't define the card2 class, because the behavior is not clear (the method getType returns '0'). For doing this, we can define a class as abstract, this means that this class can't be instantiated.
+
+Also, the methods can be marked as abstract; this will ensure that the subclasses will define the behavior of this method.
+
+```java
+public abstract class Card2{
+    private char Number;
+    
+    public abstract char getType();
+    
+    @Override
+    public String toString() {
+        return String.valueOf(Number) + this.getType();
+    }
+}
+```
+
+#### Error handling
+
+Following with the Poker cards examples, we can define now cards with all the characters available. The system needs to check this errors and ensure the representation is respected. This error handling can be designed :
+
+* returning a boolean (true if all was correct, false otherwise)
+* Returning an enumeration or a predefined integer value (RET_OK 1, RET_EOF 2, ...)
+
+This two designs make the source code a bit tricky to understand, the best option is to use exceptions. An exception is an abnormal program flow, used when an error is found.
+
+```java
+public class Card2{
+    //Constructor, getter, setters, etc...
+    public void setNumber(char c) throws Exception{
+        if(!(number >= '1' && number <= '9') ||
+            !(number == 'A') || !(number == 'J') ||
+            !(number == 'J') || !(number == 'Q') ||
+            !(number == 'K'))
+            throw new Exception("Incorrect card number");
+        else this.Number = number;
+    }
+}
+```
+
+If the exception is not captured, the application crash. The user can treat the exceptions using a try-catch block:
+
+````java
+public static void main(String[] args) {
+    Card c;
+    while(true){
+    	try{
+            char user_input = io.readChar("Enter card number [A-2-3...-9-J-Q-K]");
+            c = new Card('9', CardType.Clubs);
+            break; //if we reach this line, no exception is thrown, go out of the loop.
+        }
+        catch(Exception e){io.println(e.getMessage());}
+    }
+    System.out.println(c.toString());
+}
+````
+
+
+
+#### Special modifiers
+
+We have two special modifiers, **static** and **final/constant**:
+
+* A final/constant variable is a variable that can't be modified once is assigned.
+* A static method, class or attribute is something that only is declared once for each class, not for each object. This is useful to save memory.
+
+````java
+public class Alfa {
+    public final Integer a;
+	public static Integer MAX_A = 100; //All instancies of Alfa will have the same variable "pointer"
+    
+    public Alfa(Integer x){this.a = x;}
+    //This method won't compile: error: cannot assign a value to final variable a
+    public void setA(Integer a){this.a = a;}
+}
+````
 
 ### UML diagrams
 
@@ -256,7 +394,7 @@ catch(Exception e) {
 }
 ````
 
-#### Exemple
+#### Example
 ````java
 public class Main {
   public static void main(String[ ] args) {

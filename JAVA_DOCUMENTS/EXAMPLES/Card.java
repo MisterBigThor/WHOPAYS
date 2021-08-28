@@ -30,8 +30,13 @@ public class Card{
      * Set the number of the card.
      * @param number Character with the internal representation (A-2-3...-9-J-Q-k)
      */
-    public void setNumber(char number) {
-        this.Number = number;
+    public void setNumber(char number) throws Exception{
+        if(!(number >= '1' && number <= '9') ||
+            !(number == 'A') || !(number == 'J') ||
+            !(number == 'J') || !(number == 'Q') ||
+            !(number == 'K'))
+            throw new Exception("Incorrect card number");
+        else this.Number = number;
     }
 
     /**
