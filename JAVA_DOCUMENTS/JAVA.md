@@ -10,6 +10,7 @@ In this course you will see and learn the following contents. In this readme fil
   * Object orientation concepts
   * UML Diagrams
   * Design Patterns
+  * 3-layer design
 * Introduction and basics for GIT
 * JAVA lang introduction
   * Basics that you will need to know			
@@ -28,16 +29,53 @@ Project subject, with 3 deliverables:
 
 * The project is develop in groups of 3-4 students.
 * Is mandatory to use the gitlab repository (based on git control version).
+* Java version 11.*
 
 ## UML and Object Orientation concepts
 
 ### Use case diagrams
 
+Brief description of the services offered by the system. A brief description of each use case is usually attached to the diagram.
+
+![image-20210828123310935](JAVA.assets/image-20210828123310935.png)
+
+In the example, we can see that all the use cases requires a login to create the tickets. 
+
+Is very useful to group the use cases, in the example we can group the create/delete ticket under a use case named, for example, *Ticket Management*.
+
 ### Orientation Object concepts
+
+The object orientation is a very useful programming concept, used to keep organized in structures all the source code and to track the bugs.
+
+A <u>**class**</u> is an abstract representation of some object we want to model, for example we can create a class to represent the Poker playing cards:
+
+![image-20210828132831495](JAVA.assets/image-20210828132831495.png)
+
+Here, we have defined an UML class that can be used to represent a card inside our system. This diagram can be implemented in all the O.O. programming languages, in the example we have used Java.
+
+> The getters and setter methods are a very good practice to access the attributes, always declare the attributes private and generate a getter/setter method.
+>
+> Always is important to keep the attributes private to being able in a future to change the internal representation. Imagine the *Number* char becomes an Integer, we will need to adapt only the getter and setter method, no the others classes and methods that uses this methods. If we don't use this type of methods, we will need to change a lot of source code to adapt this representation change.
+
+#### Method overloading
+
+This concept is used to use a same method name with different parameters. 
+
+Imagine that we want to set the Number of a card with integers, characters and strings; for a better code develop experience (and also make the source code more readable) we can use the same method name.
+
+![image-20210828135215634](JAVA.assets/image-20210828135215634.png)
+
+> We can also use different method name
+
+#### Class inheritance and method override
+
+
 
 ### UML diagrams
 
 ### Design patterns
+
+### 3-layers design
 
 ## JAVA Language
 
@@ -184,11 +222,13 @@ Almost all the blocks have a C-syntax.
 * If-then, If-then-else, switch-case, while and for statements are equal than C.
 * The branching statements (break, continue) are equal than C, considered bad practice.
 
-## Classes and objects
+## Java classes and objects
 
-### Object
+### The Object class
 
 ### Class
+
+### Java special attributes and methods
 
 ### Interfaces and abstract classes
 
