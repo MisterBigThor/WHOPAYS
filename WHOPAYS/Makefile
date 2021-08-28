@@ -7,11 +7,6 @@ documentation:
 	git commit -m "update JAVADOC"
 	#git push
 
-compile_project:
-	javac -d $(out_dir)/ WHOPAYS/Domain/*.java
-	javac -d $(out_dir)/ WHOPAYS/Persistence/*.java
-	javac -d $(out_dir)/ WHOPAYS/*.java
-
 run_main:
 	cd class_files
 	java WHOPAYS.Main
