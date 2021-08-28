@@ -268,8 +268,85 @@ If you need to use or override some exceptions, you can refer to the following d
 
 ## Input/Output streaming and file management
 
-JSON, XML.
+When we work with files , I/O we need to understand what are paths. We can see two different types of paths. Absolute 
+path and abstract path. In simple words, an absolute path refers to the same location in a file system relative 
+to the root directory, whereas a relative path points to a specific location in a file system relative to the current directory you are working on.
 
+### Files
+
+**Package**: java.io.File . This package contains a functions that we could need for manage files or folders.
+
+In the following link we can find all documentation about functions that contain this package. Remember read and ask us if you have any doubt. [Documentation](https://docs.oracle.com/javase/7/docs/api/java/io/File.html)
+
+First of all we need to create a new instance of File object. 
+
+
+````java
+        File files = new File(path); # String that its the path of our file or folder
+````
+* We can check if file is directory or not using this function
+````java
+public Boolean isDirectory(String path) {
+        File aux = new File(path);
+        if(aux.isDirectory()) return true;
+        else return false;
+    }
+````
+
+* Or we can check if is file or not
+
+````java
+public Boolean isFile(String path) {
+        File aux = new File(path);
+        if(aux.isFile()) return true;
+        else return false;
+    }
+````
+
+* Creating a new Directory
+
+````java
+public Boolean createDirectory(String path_abs) {
+
+        File aux = new File(path_abs);
+        return aux.mkdir();
+
+    }
+````
+* Read and Write files
+  * For read and write files we need to import **FileInputStream** / **FileOutputStream**
+
+    * Writing and reading file array of bytes
+````java
+public void saveFile(String path_out , ArrayList<Byte> s) throws IOException {
+		FileOutputStream f = new FileOutputStream(path_out);
+		byte[] bytes = new byte[s.size()];
+		for(int i = 0; i < s.size(); ++i) {
+			bytes[i] = s.get(i);
+		}
+		f.write(bytes, 0, bytes.length);
+		f.close();
+	}
+````
+````java
+import java.nio.file.Paths;
+import java.nio.file.Path;
+
+public ArrayList<Byte> getArrayList(String path) throws IOException {
+		Path rn_demo = Paths.get(path);
+		ArrayList<Byte> aux = new ArrayList<Byte>();
+		try (InputStream in = Files.newInputStream(rn_demo)) {
+			byte[] bytes = new byte[(int)Files.size(rn_demo)];
+			in.read(bytes);
+			for(int i = 0; i < bytes.length; ++i) {
+				aux.add((Byte)bytes[i]);
+			}
+
+			in.close();
+		}
+		return aux;
+	}
+````
 ## Java objects and packages
 
 Java defines packages names (like the C++ *name spaces*) to avoid conflicts and duplicated names and to tidy-up the developing environment.
