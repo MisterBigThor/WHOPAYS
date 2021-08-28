@@ -2,21 +2,44 @@
 
 ## Table of contents
 
-In this course you will see and learn the following contents. In this readme file you can find all the documentation 
-you will need.
+In this course you will see and learn the following contents. In this readme file you can find all the documentation you will need.
+
 * PROP : Quick introduction about the subject
-* Introduction to UML
+* Review of UML and O.O. concepts.
+  * Use case description
+  * Object orientation concepts
+  * UML Diagrams
+  * Design Patterns
 * Introduction and basics for GIT
 * JAVA lang introduction
   * Basics that you will need to know			
   * Introduction to three-layer architecture
   * Manage of files inside IntelliJ
   * Controller implementation and interaction between different layers   
+* SWING				
 
-* SWING								
+## PROP
 
+Project subject, with 3 deliverables:
 
-## JAVA LANGUAGE
+1. First deliverable: All the application domain, with test and the basic algorithm.
+2. Second deliverable: Documentation of the whole project (UML diagrams).
+3. Last deliverable (Project presentation) : All the group will meet with the teacher and make a demo of the project.
+
+* The project is develop in groups of 3-4 students.
+* Is mandatory to use the gitlab repository (based on git control version).
+
+## UML and Object Orientation concepts
+
+### Use case diagrams
+
+### Orientation Object concepts
+
+### UML diagrams
+
+### Design patterns
+
+## JAVA Language
 
 Java is a object-oriented programming language, with the next main features:
 
@@ -25,8 +48,6 @@ Java is a object-oriented programming language, with the next main features:
 * Easier to develop code, compared with C/C++.
 * The Java code is processed by the Java Virtual Machine. The compilation process checks the syntax but doesn't build a binary file.
 * All objects and types at Java are derived from the Object class.
-
-[TOC]
 
 ## Environment
 
@@ -163,7 +184,7 @@ Almost all the blocks have a C-syntax.
 * If-then, If-then-else, switch-case, while and for statements are equal than C.
 * The branching statements (break, continue) are equal than C, considered bad practice.
 
-## Classes, objects and UML
+## Classes and objects
 
 ### Object
 
