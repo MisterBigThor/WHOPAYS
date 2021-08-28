@@ -9,7 +9,7 @@ public class Card{
         Clubs, Diamonds, Spades, Hearts
     }
 
-    public Card(char number, Card.CardType type) {
+    public Card(char number, Card.CardType type) throws Exception{
         setNumber(number);
         setType(type);
     }
@@ -60,7 +60,7 @@ public class Card{
         return "Card [Number=" + Number + ", Type=" + Type + "]";
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Card c = new Card('9', CardType.Clubs);
         System.out.println(c.toString());
     }
